@@ -1,7 +1,10 @@
+import random
+from bitstring import BitArray
+import helper
 
 
 class gen_alg_handler:
-    def __init__(init_pop):
+    def __init__(self):
         self.MUT_RATE #mutation rate
         #self.DEATH_RATE #
         self.CROSS_RATE #breeding rate
@@ -12,11 +15,10 @@ class gen_alg_handler:
         # populate next
 
         self.pop_count
+        self.pop_type
         self.population
         
         #generates initial populatation
-
-
 
     #loops ga algorithm
     #a number of generations
@@ -38,23 +40,27 @@ class gen_alg_handler:
 
 
     def __initiate_population(count = 100):
-        return
+         return
      
-    #generate probability table for selecting parents to generate next
+    #generate probability table for sele1cting parens to generate next
     #generation based on fitness score
     def __generate_prob_table():
         return
-    def __crossover(org1, org2):
-        
-        return
     
     
-    def __gen_rand_org(org_type):
-        
+    def __crossover__(self, org1, org2):
+        start = random.randint(self.pop_type.DNA_length)
+        #decides which dna string 
+        if random.choice([0,1]):
+            return org_type(org1.DNA[0:start] + org2.DNA[start:])
+        else:
+            return org_type(org2.DNA[0:start] + org1.DNA[start:])
 
-    def __mutate(org):
-        return
+
+    def __mutate__(self,org):
+        for g in org.DNA:
+            if yes_no(self.MUT_RATE):
+                g != g
+
     def get_most_fit():
         return
-
-    
