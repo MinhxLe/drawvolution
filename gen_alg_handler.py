@@ -23,7 +23,7 @@ class gen_alg_handler:
     #loops ga algorithm
     #a number of generations
     #TODO: implement parallelism (a lot of repeated work)
-    def simulate_evolution(pop_count = 100, gen_count = 10000):
+    def simulate_evolution(self, pop_count = 100, gen_count = 10000):
         #initializes population
         tot_fitness = 0 #total fitness of generation
         for c in range(pop_count):
@@ -39,12 +39,12 @@ class gen_alg_handler:
 
 
 
-    def __initiate_population(count = 100):
+    def __initiate_population(self, count = 100):
          return
      
     #generate probability table for sele1cting parens to generate next
     #generation based on fitness score
-    def __generate_prob_table():
+    def __generate_prob_table(self):
         return
     
     

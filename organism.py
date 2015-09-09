@@ -13,11 +13,11 @@ class organism (object):
             self.DNA = dna
 
     @abc.abstractmethod
-    def ___interpret_DNA():
+    def ___interpret_DNA__(self):
         return
     
     @abc.abstractmethod
-    def __calc_fitness_score():
+    def __calc_fitness_score__(self):
         return
 
     #TODO: method to sort organisms by fitness score
