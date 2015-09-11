@@ -16,8 +16,7 @@ class gen_alg_handler:
 
         self.pop_count
         self.pop_type
-        self.population
-        
+        self.population = set('')
         #generates initial populatation
 
     #loops ga algorithm
@@ -26,9 +25,15 @@ class gen_alg_handler:
     def simulate_evolution(self, pop_count = 100, gen_count = 10000):
         #initializes population
         tot_fitness = 0 #total fitness of generation
-        for c in range(pop_count):
-            __gen_rand_org(org)
+        
+        most_fit_org = self.pop_type()
+        self.population.add(most_fit_org)
+        tot_fitness += most_fit_org.fit_score
 
+        for c in range(pop_count - 1):
+            new_org = self.pop_type()
+            self.population.add(self.pop_type())
+            if new_org.fit_score
 
 #calculates fitness of generation
 #selects parents based on probability ratio of fitness of current gen
@@ -36,15 +41,10 @@ class gen_alg_handler:
 #apply mutaiton to new indiv
 #end status check
 #repeat
-
-
-
-    def __initiate_population(self, count = 100):
-         return
      
     #generate probability table for sele1cting parens to generate next
     #generation based on fitness score
-    def __generate_prob_table(self):
+    def __generate_prob_table__(self):
         return
     
     
