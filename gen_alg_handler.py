@@ -1,28 +1,21 @@
 import random
 from bitstring import BitArray
-import helper
-
+from circle_org import cirle_org
 
 class gen_alg_handler:
-    def __init__(self):
-        self.MUT_RATE #mutation rate
-        #self.DEATH_RATE #
-        self.CROSS_RATE #breeding rate
-
-
+    _MUTE_RATE = .001
+    _CROSS_RATE = .7
+    def __init__(self, pt):
         # stores population in such a manner where we can get population with
         # highest fitness score, select parents based on roulette score to
         # populate next
-
-        self.pop_count
-        self.pop_type
+        self.pop_type = pt
         self.population = set('')
-        #generates initial populatation
 
     #loops ga algorithm
     #a number of generations
     #TODO: implement parallelism (a lot of repeated work)
-    def simulate_evolution(self, pop_count = 100, gen_count = 10000):
+    def simulate_evolution(self, pop_count, gen_count = 10000):
         #initializes population
         tot_fitness = 0 #total fitness of generation
         
@@ -59,7 +52,7 @@ class gen_alg_handler:
 
     def __mutate__(self,org):
         for g in org.DNA:
-            if yes_no(self.MUT_RATE):
+            if yes_no(gen_alg_handler._MUT_RATE):
                 g != g
 
     def get_most_fit():
