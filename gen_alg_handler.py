@@ -26,7 +26,8 @@ class gen_alg_handler:
         for c in range(pop_count - 1):
             new_org = self.pop_type()
             self.population.add(self.pop_type())
-            if new_org.fit_score
+            if new_org.fit_score > most_fit_org.fit_score:
+                most_fit_org = new_org
 
 #calculates fitness of generation
 #selects parents based on probability ratio of fitness of current gen

@@ -86,7 +86,7 @@ class circle_org:
                 raw_error_acc += abs(new - orig)
         #return raw_error_acc 
         #TODO fix this normalization...LOL
-        return 1 / (raw_error_acc/100000)
+        return 100000 * raw_error_acc
 
     def __interpret_DNA__(self):
         #c represent sthe shift
