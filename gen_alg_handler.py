@@ -15,7 +15,7 @@ class gen_alg_handler:
     #loops ga algorithm
     #a number of generations
     #TODO: implement parallelism (a lot of repeated work)
-    def simulate_evolution(self, pop_count, gen_count = 10000):
+    def simulate_evolution(self, pop_count, gen_count = 150000):
         #initializes population
         tot_fitness = 0 #total fitness of generation
         
