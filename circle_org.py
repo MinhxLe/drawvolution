@@ -5,10 +5,10 @@ import random
 BYTE_SIZE = 8
 
 class circle_org:
-    _IMAGE_NAME = 'dickbutt.jpg'
+    _IMAGE_NAME = 'Mona_Lisa.jpg'
     #solution space limitations
     _CIRC_COUNT = 100
-    _IMAGE_MODE = "RGBA" #TODO: change to enum
+    _IMAGE_MODE = "L" #TODO: change to enum
     
     #solution space dna limitation
     _H_DIM_BIT_COUNT = 10 # size of pictures can be up to 2^10
@@ -37,14 +37,15 @@ class circle_org:
     #circle image drawing
     def __init__(self, dna):
         self.DNA = dna
-        self.image = Image.new('RGB', circle_org._REF_IMAGE.size, "white")
         
         if circle_org._IMAGE_MODE == 'RGBA':
+            self.image = Image.new('RGB', circle_org._REF_IMAGE.size, "white")
             self.img_editor = ImageDraw.Draw(self.image, 'RGBA')
         elif circle_org._IMAGE_MODE == 'L':
+            self.image = Image.new('L', circle_org._REF_IMAGE.size, "white")
             self.img_editor = ImageDraw.Draw(self.image, 'L')
         
-        self.__interpret_DNA__()
+        #self.__interpret_DNA__()
         
         self.fit_score = self.__calc_fitness_score__()
 
@@ -53,9 +54,11 @@ class circle_org:
             1)))
         self.image = Image.new('RGB', circle_org._REF_IMAGE.size, "white")
         
-        if circle_org._IMAGE_MODE == 'RGBA':
+        if circle_org._IMAGE_MODE == 'RGBA':     
+            self.image = Image.new('RGB', circle_org._REF_IMAGE.size, "white")
             self.img_editor = ImageDraw.Draw(self.image, 'RGBA')
-        elif circle_org._IMAGE_MODE == 'L':
+        elif circle_org._IMAGE_MODE == 'L': 
+            self.image = Image.new('L', circle_org._REF_IMAGE.size, "white")
             self.img_editor = ImageDraw.Draw(self.image, 'L')
         
         self.__interpret_DNA__()
@@ -74,10 +77,16 @@ class circle_org:
         
         
         raw_error_acc = 0 
-        for new,orig in zip(circle_org._REF_IMAGE_DATA, self.image.getdata()):
-            for new_col, orig_col in zip(new, orig):
-                raw_error_acc += abs(new_col - orig_col)
-                return raw_error_acc 
+        if circle_org._IMAGE_MODE == 'RGBA':
+            for new,orig in zip(circle_org._REF_IMAGE_DATA, self.image.getdata()):
+                for new_col, orig_col in zip(new, orig):
+                    raw_error_acc += abs(new_col - orig_col)
+        elif circle_org._IMAGE_MODE == 'L':
+            for new,orig in zip(circle_org._REF_IMAGE_DATA, self.image.getdata()):
+                raw_error_acc += abs(new - orig)
+        #return raw_error_acc 
+        #TODO fix this normalization...LOL
+        return 1 / (raw_error_acc/100000)
 
     def __interpret_DNA__(self):
         #c represent sthe shift
@@ -102,7 +111,7 @@ class circle_org:
             elif circle_org._IMAGE_MODE == 'L':
                 L = self.DNA[shift:shift+BYTE_SIZE].uint
                 shift += BYTE_SIZE
-                color = (L)
+                color = L
             else:
                 #TODO ERROR HANDLING!
                 return
