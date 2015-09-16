@@ -8,7 +8,7 @@ class circle_org:
     _IMAGE_NAME = 'Mona_Lisa.jpg'
     #solution space limitations
     _CIRC_COUNT = 100
-    _IMAGE_MODE = "L" #TODO: change to enum
+    _IMAGE_MODE = "RGBA" #TODO: change to enum
     
     #solution space dna limitation
     _H_DIM_BIT_COUNT = 10 # size of pictures can be up to 2^10
@@ -32,8 +32,8 @@ class circle_org:
     DNA_LENGTH = _CIRC_COUNT * _CIRC_BIT_COUNT
 
     #solution image information(part of class to prevent multiple computaiton
-    #_REF_IMAGE_DATA = _REF_IMAGE.getdata()
-    REF_IMAGE_HASH = imagehash.dhash(_REF_IMAGE)
+    _REF_IMAGE_DATA = _REF_IMAGE.getdata()
+    #REF_IMAGE_HASH = imagehash.dhash(_REF_IMAGE)
 
     def __init__(self, dna = BitArray(""), rand_bit = True): 
         if rand_bit:
@@ -61,10 +61,10 @@ class circle_org:
 
 
     def __calc_fitness_score__(self):
-        img_hash = imagehash.dhash(self.image)
-        return abs(img_hash - circle_org.REF_IMAGE_HASH)
+        #img_hash = imagehash.dhash(self.image)
+        #return abs(img_hash - circle_org.REF_IMAGE_HASH)
 
-        '''
+        
         #TODO:naive implementation, compares every pixel 
         
         
@@ -79,7 +79,7 @@ class circle_org:
         #return raw_error_acc 
         #TODO fix this normalization...LOL
         return 100000 / raw_error_acc
-        '''
+
     def __interpret_DNA__(self):
         #c represent sthe shift
         for c in range(0, circle_org._CIRC_COUNT):

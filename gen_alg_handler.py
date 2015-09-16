@@ -40,6 +40,7 @@ class gen_alg_handler:
         for x in range(0, gen_count):
             #saving most fit
             most_fit_org.save_image("test/" + str(x) + ".png")
+            print (most_fit_org.fit_score)
             most_fit_org.fit_score = 0 #TODO: DIRTY, FIX THIS
 
             temp_population  = []#temporary population buff
