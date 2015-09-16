@@ -5,8 +5,8 @@ from helper import yes_no, weighted_choice
 
 
 class gen_alg_handler:
-    MUT_RATE = .001
-    CROSS_RATE = .7
+    MUT_RATE = .005
+    #CROSS_RATE = .7
     def __init__(self, pt):
         # stores population in such a manner where we can get population with
         # highest fitness score, select parents based on roulette score to
@@ -17,7 +17,8 @@ class gen_alg_handler:
     #loops ga algorithm
     #a number of generations
     #TODO: implement parallelism (a lot of repeated work)
-    def simulate_evolution(self, pop_count = 100, gen_count = 150000):
+    def simulate_evolution(self, pop_count = 100, gen_count = 150000,
+            save_folder = 'test/'):
         #initializes population
         tot_fitness = 0 #total fitness of generation
         population = []
@@ -39,28 +40,25 @@ class gen_alg_handler:
         cond = True #TODO: stop loop if certain fitscore is met
         for x in range(0, gen_count):
             #saving most fit
-            most_fit_org.save_image("test/" + str(x) + ".png")
+            most_fit_org.save_image(save_folder + str(x) + ".png")
             print (most_fit_org.fit_score)
             most_fit_org.fit_score = 0 #TODO: DIRTY, FIX THIS
 
             temp_population  = []#temporary population buff
             new_pop_count = 0
-            while new_pop_count != pop_count:
+            while new_pop_count < pop_count:
                 #2 new individuals
-                p1 = weighted_choice(population, pop_weight) 
-                p2 = weighted_choice(population, pop_weight)    
-                if yes_no(gen_alg_handler.CROSS_RATE):
+                p1 = weighted_choice(population, pop_weight)
+                p2 = weighted_choice(population, pop_weight)
+                #if yes_no(gen_alg_handler.CROSS_RATE):
                     #select 2 parents
-                    
-                    temp_population.extend(self.gen_new_org(p1,p2))
-                    #checking if added pop is new max
-                    if temp_population[-1].fit_score > most_fit_org.fit_score:
-                        most_fit_org = temp_population[-1]
-
-                    if temp_population[-2].fit_score > most_fit_org.fit_score:
-                        most_fit_org = temp_population[-2]
-
-                    new_pop_count += 2
+                kids = self.gen_new_org(p1,p2)
+                for kid in kids:
+                    if kid.fit_score > p1.fit_score or kid.fit_score > p2.fit_score:
+                        temp_population.append(kid)
+                        new_pop_count += 1
+                        if kid.fit_score >= most_fit_org.fit_score:
+                            most_fit_org = kid
             population = temp_population
 
 #calculates fitness of generation

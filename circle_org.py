@@ -8,7 +8,7 @@ class circle_org:
     _IMAGE_NAME = 'Mona_Lisa.jpg'
     #solution space limitations
     _CIRC_COUNT = 100
-    _IMAGE_MODE = "RGBA" #TODO: change to enum
+    _IMAGE_MODE = "L" #TODO: change to enum
     
     #solution space dna limitation
     _H_DIM_BIT_COUNT = 10 # size of pictures can be up to 2^10
