@@ -1,7 +1,7 @@
 from bitstring import BitArray
 from PIL import Image, ImageDraw
+import imagehash
 import random
-
 BYTE_SIZE = 8
 
 class circle_org:
@@ -27,31 +27,19 @@ class circle_org:
         _MODE_BIT_COUNT = -1
         _REF_IMAGE  = Image.open(_IMAGE_NAME)
     
-    _CIRC_BIT_COUNT = (_H_DIM_BIT_COUNT * _W_DIM_BIT_COUNT *
-        _R_DIM_BIT_COUNT * _MODE_BIT_COUNT) 
+    _CIRC_BIT_COUNT = (_H_DIM_BIT_COUNT + _W_DIM_BIT_COUNT + 
+        _R_DIM_BIT_COUNT + _MODE_BIT_COUNT) 
     DNA_LENGTH = _CIRC_COUNT * _CIRC_BIT_COUNT
 
     #solution image information(part of class to prevent multiple computaiton
-    _REF_IMAGE_DATA = _REF_IMAGE.getdata()
+    #_REF_IMAGE_DATA = _REF_IMAGE.getdata()
+    REF_IMAGE_HASH = imagehash.dhash(_REF_IMAGE)
 
-    #circle image drawing
-    def __init__(self, dna):
-        self.DNA = dna
-        
-        if circle_org._IMAGE_MODE == 'RGBA':
-            self.image = Image.new('RGB', circle_org._REF_IMAGE.size, "white")
-            self.img_editor = ImageDraw.Draw(self.image, 'RGBA')
-        elif circle_org._IMAGE_MODE == 'L':
-            self.image = Image.new('L', circle_org._REF_IMAGE.size, "white")
-            self.img_editor = ImageDraw.Draw(self.image, 'L')
-        
-        #self.__interpret_DNA__()
-        
-        self.fit_score = self.__calc_fitness_score__()
-
-    def __init__(self):
-        self.DNA = dna = BitArray(bin(random.randint(0,2**self.DNA_LENGTH -
-            1)))
+    def __init__(self, dna = BitArray(""), rand_bit = True): 
+        if rand_bit:
+            self.DNA =  BitArray(bin(random.randint(0,2**circle_org.DNA_LENGTH -1)))
+        else:
+            self.DNA = dna
         self.image = Image.new('RGB', circle_org._REF_IMAGE.size, "white")
         
         if circle_org._IMAGE_MODE == 'RGBA':     
@@ -73,6 +61,10 @@ class circle_org:
 
 
     def __calc_fitness_score__(self):
+        img_hash = imagehash.dhash(self.image)
+        return abs(img_hash - circle_org.REF_IMAGE_HASH)
+
+        '''
         #TODO:naive implementation, compares every pixel 
         
         
@@ -87,7 +79,7 @@ class circle_org:
         #return raw_error_acc 
         #TODO fix this normalization...LOL
         return 100000 / raw_error_acc
-
+        '''
     def __interpret_DNA__(self):
         #c represent sthe shift
         for c in range(0, circle_org._CIRC_COUNT):

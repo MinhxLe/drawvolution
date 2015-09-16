@@ -1,13 +1,11 @@
 #!/bin/python
-
+from gen_alg_handler import gen_alg_handler
 from circle_org import circle_org
 
 def main():
-    obj = set('')
-    for x in range (0,100):
-        c = circle_org()
-        obj.add(c)
-        #print (str(x) + ". " + str(c.fit_score))
-        #c.save_image("test/test" + str(x) + ".jpg")
+    c = circle_org()
+    g = gen_alg_handler(circle_org)
+    g.simulate_evolution(10,10)
+    
 if __name__ == '__main__':
     main()

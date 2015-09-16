@@ -1,33 +1,66 @@
 import random
 from bitstring import BitArray
-from circle_org import cirle_org
+from circle_org import circle_org
+from helper import yes_no, weighted_choice
+
 
 class gen_alg_handler:
-    _MUTE_RATE = .001
-    _CROSS_RATE = .7
+    MUT_RATE = .001
+    CROSS_RATE = .7
     def __init__(self, pt):
         # stores population in such a manner where we can get population with
         # highest fitness score, select parents based on roulette score to
         # populate next
         self.pop_type = pt
-        self.population = set('')
+        #self.population = set('')
 
     #loops ga algorithm
     #a number of generations
     #TODO: implement parallelism (a lot of repeated work)
-    def simulate_evolution(self, pop_count, gen_count = 150000):
+    def simulate_evolution(self, pop_count = 100, gen_count = 150000):
         #initializes population
         tot_fitness = 0 #total fitness of generation
-        
+        population = []
+        pop_weight = []
         most_fit_org = self.pop_type()
-        self.population.add(most_fit_org)
+        population.append(most_fit_org)
+        pop_weight.append(most_fit_org.fit_score)
         tot_fitness += most_fit_org.fit_score
 
         for c in range(pop_count - 1):
             new_org = self.pop_type()
-            self.population.add(self.pop_type())
+            population.append(new_org)
+            pop_weight.append(new_org.fit_score)
+            tot_fitness += new_org.fit_score
             if new_org.fit_score > most_fit_org.fit_score:
                 most_fit_org = new_org
+
+        #begins loop for evolution
+        cond = True #TODO: stop loop if certain fitscore is met
+        for x in range(0, gen_count):
+            #saving most fit
+            most_fit_org.save_image("test/" + str(x) + ".png")
+            most_fit_org.fit_score = 0 #TODO: DIRTY, FIX THIS
+
+            temp_population  = []#temporary population buff
+            new_pop_count = 0
+            while new_pop_count != pop_count:
+                #2 new individuals
+                p1 = weighted_choice(population, pop_weight) 
+                p2 = weighted_choice(population, pop_weight)    
+                if yes_no(gen_alg_handler.CROSS_RATE):
+                    #select 2 parents
+                    
+                    temp_population.extend(self.gen_new_org(p1,p2))
+                    #checking if added pop is new max
+                    if temp_population[-1].fit_score > most_fit_org.fit_score:
+                        most_fit_org = temp_population[-1]
+
+                    if temp_population[-2].fit_score > most_fit_org.fit_score:
+                        most_fit_org = temp_population[-2]
+
+                    new_pop_count += 2
+            population = temp_population
 
 #calculates fitness of generation
 #selects parents based on probability ratio of fitness of current gen
@@ -35,26 +68,33 @@ class gen_alg_handler:
 #apply mutaiton to new indiv
 #end status check
 #repeat
-     
-    #generate probability table for sele1cting parens to generate next
-    #generation based on fitness score
-    def __generate_prob_table__(self):
-        return
-    
-    
-    def __crossover__(self, org1, org2):
-        start = random.randint(self.pop_type.DNA_length)
+    def gen_new_org(self, org1,org2):
+        new_org_dna = self.__crossover__(org1.DNA, org2.DNA)
+        for dna in new_org_dna:
+           self.__mutate__(dna)
+        #print (new_org_dna[1].bin)
+        return (self.pop_type(new_org_dna[0], False),
+                self.pop_type(new_org_dna[1], False))
+
+
+    #DNA BITSTRING PRIVATE METHODS
+    def __crossover__(self, dna1, dna2):
+        start = random.randint(0, self.pop_type.DNA_LENGTH)
+        return ((dna1[0:start] + dna2[start:]),
+            (dna2[0:start] + dna1[start:]))
+
+        '''
+        start = random.randint(self.pop_type.DNA_LENGTH)
         #decides which dna string 
         if random.choice([0,1]):
             return org_type(org1.DNA[0:start] + org2.DNA[start:])
         else:
             return org_type(org2.DNA[0:start] + org1.DNA[start:])
 
+        '''
+    def __mutate__(self,dna):
+        for g in dna:
+            if yes_no(gen_alg_handler.MUT_RATE):
+                g = not g
 
-    def __mutate__(self,org):
-        for g in org.DNA:
-            if yes_no(gen_alg_handler._MUT_RATE):
-                g != g
 
-    def get_most_fit():
-        return
