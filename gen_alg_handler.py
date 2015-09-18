@@ -40,8 +40,9 @@ class gen_alg_handler:
         cond = True #TODO: stop loop if certain fitscore is met
         for x in range(0, gen_count):
             #saving most fit
-            most_fit_org.save_image(save_folder + str(x) + ".png")
-            print (most_fit_org.fit_score)
+            if x % 100 == 0:
+                most_fit_org.save_image('test/' + str(x) + ".png")
+            #print (most_fit_org.fit_score)
             most_fit_org.fit_score = 0 #TODO: DIRTY, FIX THIS
 
             temp_population  = []#temporary population buff
@@ -92,8 +93,8 @@ class gen_alg_handler:
 
         '''
     def __mutate__(self,dna):
-        for g in dna:
+        for x in range(0, dna.length)
             if yes_no(gen_alg_handler.MUT_RATE):
-                g = not g
+                dna[x] = ~dna[x]
 
 
