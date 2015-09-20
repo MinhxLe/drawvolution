@@ -65,9 +65,7 @@ class circle_org:
         #return abs(img_hash - circle_org.REF_IMAGE_HASH)
 
         
-        #TODO:naive implementation, compares every pixel 
-        
-        
+        #TODO:naive implementation, compares every pixel  
         raw_error_acc = 0 
         if circle_org._IMAGE_MODE == 'RGBA':
             for new,orig in zip(circle_org._REF_IMAGE_DATA, self.image.getdata()):
@@ -78,7 +76,7 @@ class circle_org:
                 raw_error_acc += abs(new - orig)
         #return raw_error_acc 
         #TODO fix this normalization...LOL
-        return 100000 / raw_error_acc
+        return raw_error_acc
 
     def __interpret_DNA__(self):
         #c represent sthe shift
