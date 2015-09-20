@@ -5,7 +5,7 @@ import random
 BYTE_SIZE = 8
 
 class circle_org:
-    _IMAGE_NAME = 'Mona_Lisa.jpg'
+    _IMAGE_NAME = 'cdarwin.png'
     #solution space limitations
     _CIRC_COUNT = 100
     _IMAGE_MODE = "L" #TODO: change to enum
@@ -33,7 +33,7 @@ class circle_org:
 
     #solution image information(part of class to prevent multiple computaiton
     _REF_IMAGE_DATA = _REF_IMAGE.getdata()
-    #REF_IMAGE_HASH = imagehash.dhash(_REF_IMAGE)
+    REF_IMAGE_HASH = imagehash.dhash(_REF_IMAGE)
 
     def __init__(self, dna = BitArray(""), rand_bit = True): 
         if rand_bit:
@@ -62,7 +62,7 @@ class circle_org:
 
     def __calc_fitness_score__(self):
         #img_hash = imagehash.dhash(self.image)
-        #return abs(img_hash - circle_org.REF_IMAGE_HASH)
+        #return 100/abs(img_hash - circle_org.REF_IMAGE_HASH)
 
         
         #TODO:naive implementation, compares every pixel  
@@ -77,7 +77,7 @@ class circle_org:
         #return raw_error_acc 
         #TODO fix this normalization...LOL
         return 100000/raw_error_acc
-
+        
     def __interpret_DNA__(self):
         #c represent sthe shift
         for c in range(0, circle_org._CIRC_COUNT):
