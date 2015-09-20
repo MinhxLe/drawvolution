@@ -5,6 +5,8 @@ from multiprocessing import Pool
 import imagehash
 import random
 
+from operator import itemgetter
+
 BYTE_SIZE = 8
 
 #todo: implement rgba
@@ -24,9 +26,10 @@ class circle_org:
     _IMAGE_MODE = "L" #TODO: change to enum
     
     #solution space dna limitation
-    _H_DIM_BIT_COUNT = 10 # size of pictures can be up to 2^10
-    _W_DIM_BIT_COUNT = 10
-    _R_DIM_BIT_COUNT = 8
+    X_BIT_COUNT = 8 # size of pictures can be up to 2^10
+    Y_BIT_COUNT = 8
+    Z_BIT_COUNT = 8
+    R_BIT_COUNT = 8
     # _MODE_BIT_COUNT #RGB or grey scale
 
     if _IMAGE_MODE == 'L':
@@ -40,8 +43,8 @@ class circle_org:
         _MODE_BIT_COUNT = -1
         _REF_IMAGE  = Image.open(_IMAGE_NAME)
     
-    _CIRC_BIT_COUNT = (_H_DIM_BIT_COUNT + _W_DIM_BIT_COUNT + 
-        _R_DIM_BIT_COUNT + _MODE_BIT_COUNT) 
+    _CIRC_BIT_COUNT = (X_BIT_COUNT + Y_BIT_COUNT + 
+        Z_BIT_COUNT + R_BIT_COUNT + _MODE_BIT_COUNT) 
     DNA_LENGTH = _CIRC_COUNT * _CIRC_BIT_COUNT
 
     #solution image information(part of class to prevent multiple computaiton
@@ -107,14 +110,20 @@ class circle_org:
         
     def __interpret_DNA__(self):
         #c represent sthe shift
+        circles = []
         for c in range(0, circle_org._CIRC_COUNT):
             shift = circle_org._CIRC_BIT_COUNT * c
-            x = self.DNA[shift:shift+10].uint
-            shift += 10
-            y = self.DNA[shift:shift+10].uint
-            shift += 10
-            r = self.DNA[shift:shift+BYTE_SIZE].uint
-            shift += BYTE_SIZE
+            x = self.DNA[shift:shift+circle_org.X_BIT_COUNT].uint
+            shift += circle_org.X_BIT_COUNT
+
+            y = self.DNA[shift:shift+circle_org.Y_BIT_COUNT].uint
+            shift += circle_org.Y_BIT_COUNT 
+            
+            z = self.DNA[shift:shift+circle_org.Z_BIT_COUNT].uint
+            shift += circle_org.Z_BIT_COUNT 
+ 
+            r = self.DNA[shift:shift+circle_org.R_BIT_COUNT].uint
+            shift += circle_org.R_BIT_COUNT
             if circle_org._IMAGE_MODE == 'RGBA':
                 R = self.DNA[shift:shift+BYTE_SIZE].uint
                 shift += BYTE_SIZE
@@ -128,9 +137,16 @@ class circle_org:
             elif circle_org._IMAGE_MODE == 'L':
                 L = self.DNA[shift:shift+BYTE_SIZE].uint
                 shift += BYTE_SIZE
-                color = L
+                circles.append((x,y,z,r,L))
             else:
                 #TODO ERROR HANDLING!
                 return
-            self.img_editor.ellipse([(x - r, y - r), (x+r, y+r)], color, color)
+            sorted(circles, key = itemgetter(2)) #sort by z value
+            for c in circles:
+                x = c[0]
+                y = c[1]
+                z = c[2]
+                r = c[3]
+                color = c[4]
+                self.img_editor.ellipse([(x - r, y - r), (x+r, y+r)], color, color)
 
