@@ -1,4 +1,4 @@
-﻿import random
+import random
 from bitstring import BitArray
 from circle_org import circle_org
 from helper import yes_no, weighted_choice
@@ -93,7 +93,7 @@ class gen_alg_handler:
 
         '''
     def __mutate__(self,dna):
-        for x in range(0, dna.length):
+        for x in range(0, dna.length)
             if yes_no(gen_alg_handler.MUT_RATE):
                 dna[x] = ~dna[x]
 
