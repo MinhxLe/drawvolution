@@ -20,9 +20,9 @@ def calc_l(tup):
     return raw_error_acc
 
 class circle_org:
-    _IMAGE_NAME = 'cdarwin.png'
+    _IMAGE_NAME = 'sad_pepe.png'
     #solution space limitations
-    _CIRC_COUNT = 100
+    _CIRC_COUNT = 128
     _IMAGE_MODE = "L" #TODO: change to enum
     
     #solution space dna limitation
