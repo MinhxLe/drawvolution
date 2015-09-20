@@ -32,7 +32,7 @@ class circ_org_handler:
             #saving most fit
             if x % 100 == 0:
                 most_fit_org.save_image('test/' + str(x) + ".png")
-            #print (most_fit_org.fit_score)
+            print (most_fit_org.fit_score)
             most_fit_org.fit_score = 0 #TODO: DIRTY, FIX THIS
 
             temp_population  = []#temporary population buff
@@ -83,8 +83,11 @@ class circ_org_handler:
 
         '''
     def __mutate__(self,dna):
-        for x in range(0, dna.length):
-            if yes_no(circ_org_handler.MUT_RATE):
-                dna[x] = ~dna[x]
-
+        num_bit_flip = circ_org_handler.MUT_RATE * dna.length
+        for x in range(0, num_bit_flip):
+            bit_to_flip = random.randint(0, dna.length)
+                if dna[bit_to_flip]:
+                    dna[bit_to_flip] = 0
+                else
+                    dna[bit_to_flip] = 1
 
