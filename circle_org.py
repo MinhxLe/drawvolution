@@ -1,8 +1,21 @@
 from bitstring import BitArray
 from PIL import Image, ImageDraw
+import multiprocessing
+from multiprocessing import Pool
 import imagehash
 import random
+
 BYTE_SIZE = 8
+
+#todo: implement rgba
+def calc_rgba(tup):
+    return
+
+def calc_l(tup):
+    raw_error_acc = 0
+    for new,orig in zip(tup[0], tup[1]):
+        raw_error_acc += abs(new - orig)
+    return raw_error_acc
 
 class circle_org:
     _IMAGE_NAME = 'cdarwin.png'
@@ -59,24 +72,38 @@ class circle_org:
     def set_ref_image(img_name):
         circle_org._REF_IMAGE = Image.open(img_name)
 
+    def __chunks__(self, l, total, n):
+        """Yield successive n-sized chunks from l."""
+        for i in range(0, total, n):
+            yield l[i:i+n]
+            #thanks http://stackoverflow.com/questions/312443/how-do-you-split-a-list-into-evenly-sized-chunks-in-python
 
     def __calc_fitness_score__(self):
-        #img_hash = imagehash.dhash(self.image)
-        #return 100/abs(img_hash - circle_org.REF_IMAGE_HASH)
-
-        
-        #TODO:naive implementation, compares every pixel  
-        raw_error_acc = 0 
+        raw_error_acc = 0
+        #RGBA multithreading has not been implemented yet
         if circle_org._IMAGE_MODE == 'RGBA':
             for new,orig in zip(circle_org._REF_IMAGE_DATA, self.image.getdata()):
                 for new_col, orig_col in zip(new, orig):
                     raw_error_acc += abs(new_col - orig_col)
-        elif circle_org._IMAGE_MODE == 'L':
-            for new,orig in zip(circle_org._REF_IMAGE_DATA, self.image.getdata()):
-                raw_error_acc += abs(new - orig)
-        #return raw_error_acc 
+            return 100000/raw_error_acc
+
+        #for new,orig in zip(circle_org._REF_IMAGE_DATA, self.image.getdata()):
+        #        raw_error_acc += abs(new - orig)
+        #print(raw_error_acc)
+        
+        l1 = list(self._REF_IMAGE_DATA)
+        l2 = list(self.image.getdata())
+        p = Pool(multiprocessing.cpu_count())
+        split = round(self._REF_IMAGE.width / multiprocessing.cpu_count())
+        total_pixels = self._REF_IMAGE.width * self._REF_IMAGE.height
+        l1cols = self.__chunks__(l1, total_pixels, split)
+        l2cols = self.__chunks__(l2, total_pixels, split)
+        result = sum(list(p.map(calc_l, zip(l1cols, l2cols))))
+        #print(result)
+        p.close() #clean up processes
+        p.join()
         #TODO fix this normalization...LOL
-        return 100000/raw_error_acc
+        return 100000/result
         
     def __interpret_DNA__(self):
         #c represent sthe shift
