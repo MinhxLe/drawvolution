@@ -3,6 +3,7 @@ from bitstring import BitArray
 from circle_org import circle_org
 from helper import yes_no, weighted_choice
 
+
 class circ_org_handler:
     MUT_RATE = .005
    # CROSS_RATE = .7
@@ -31,7 +32,7 @@ class circ_org_handler:
         for x in range(0, gen_count):
             #saving most fit
             most_fit_org.save_image('test/' + str(x) + ' ' + str(most_fit_org.fit_score) + ".png")
-            #print (most_fit_org.fit_score)
+            print (most_fit_org.fit_score)
             most_fit_org.fit_score = 0 #TODO: DIRTY, FIX THIS
 
             temp_population  = []#temporary population buff

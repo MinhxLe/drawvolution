@@ -7,9 +7,10 @@ from circ_org_handler import circ_org_handler
 def main():
     #pr = cProfile.Profile()
     #c = circle_org()
+    #c.save_image("test.png")
     c = circ_org_handler()
     #pr.enable()
-    c.simulate_evolution(50,10000000)
+    c.simulate_evolution(50,10)
     #pr.disable()
     #pr.print_stats()
 if __name__ == '__main__':

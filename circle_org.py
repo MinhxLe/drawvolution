@@ -28,8 +28,8 @@ class circle_org:
     #solution space dna limitation
     X_BIT_COUNT = 8 # size of pictures can be up to 2^10
     Y_BIT_COUNT = 8
-    Z_BIT_COUNT = 8
-    R_BIT_COUNT = 8
+    Z_BIT_COUNT = 7
+    R_BIT_COUNT = 6
     # _MODE_BIT_COUNT #RGB or grey scale
 
     if _IMAGE_MODE == 'L':
@@ -42,10 +42,16 @@ class circle_org:
         #TODO: error handling
         _MODE_BIT_COUNT = -1
         _REF_IMAGE  = Image.open(_IMAGE_NAME)
-    
+
     _CIRC_BIT_COUNT = (X_BIT_COUNT + Y_BIT_COUNT + 
         Z_BIT_COUNT + R_BIT_COUNT + _MODE_BIT_COUNT) 
     DNA_LENGTH = _CIRC_COUNT * _CIRC_BIT_COUNT
+    
+    #info about reference image
+    REF_IMAGE_HEIGHT = _REF_IMAGE.size[0]
+    REF_IMAGE_WIDTH = _REF_IMAGE.size[1]
+    SAMPLE_SIZE = int(REF_IMAGE_HEIGHT * REF_IMAGE_WIDTH *  .01)  
+
 
     #solution image information(part of class to prevent multiple computaiton
     _REF_IMAGE_DATA = _REF_IMAGE.getdata()
@@ -84,6 +90,13 @@ class circle_org:
     def __calc_fitness_score__(self):
         raw_error_acc = 0
         #RGBA multithreading has not been implemented yet
+        for p in range (0, circle_org.SAMPLE_SIZE):
+            pix_check = random.randint(0, circle_org.SAMPLE_SIZE - 1)
+            raw_error_acc += abs(self.image.getdata()[pix_check]  -
+                    circle_org._REF_IMAGE_DATA[pix_check])
+        print (raw_error_acc)
+        return 100/raw_error_acc
+        '''
         if circle_org._IMAGE_MODE == 'RGBA':
             for new,orig in zip(circle_org._REF_IMAGE_DATA, self.image.getdata()):
                 for new_col, orig_col in zip(new, orig):
@@ -93,7 +106,7 @@ class circle_org:
         #for new,orig in zip(circle_org._REF_IMAGE_DATA, self.image.getdata()):
         #        raw_error_acc += abs(new - orig)
         #print(raw_error_acc)
-        
+
         l1 = list(self._REF_IMAGE_DATA)
         l2 = list(self.image.getdata())
         p = Pool(multiprocessing.cpu_count())
@@ -107,7 +120,7 @@ class circle_org:
         p.join()
         #TODO fix this normalization...LOL
         return 100000/result
-        
+        '''
     def __interpret_DNA__(self):
         #c represent sthe shift
         circles = []
